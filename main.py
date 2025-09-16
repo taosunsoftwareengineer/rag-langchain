@@ -1,11 +1,10 @@
-from initialize_openai import ensure_google_key, initialize_langchain
-from initialize_vector_store import initialize_vector_store
+from initialize_llm import initialize_llm
+from setup_vector_store import setup_vector_store
 from rag_app import State
 from langgraph.graph import START, StateGraph
 
-ensure_google_key()
-llm, vector_store, prompt = initialize_langchain()
-vector_store = initialize_vector_store(vector_store)
+llm, vector_store, prompt = initialize_llm()
+vector_store = setup_vector_store(vector_store)
 
 def retrieve(state: State):
     retrieved_docs = vector_store.similarity_search(state["question"])
@@ -23,8 +22,7 @@ def main():
     graph = graph_builder.compile()
     
     result = graph.invoke({"question": "What is an LLM agent?"})
-    print(result["answer"])
-    
+    print(result["answer"]) 
     
 if __name__ == "__main__":
     main()
